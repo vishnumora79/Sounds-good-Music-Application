@@ -7,7 +7,6 @@ import axios from "axios";
 function MainPage() {
     // contains data about the current user
     const [user, setUser] = useState({});
-    // Songs to play
     const [songs, setSongs] = useState([]);
     const navigate = useNavigate();
 
@@ -27,14 +26,14 @@ function MainPage() {
         fetchUserData();
     }, []);
 
-    const  handleSearch = async (query) => {
-       try {
-         const response = await axios.get(`http://localhost:3000/api/songs?query=${query}`);
-         setSongs(response.data);
-       }
-       catch(error) {
-        console.error("Error searching for songs", error);
-       }
+    const handleSearch = async (query) => {
+        try {
+            const response = await axios.get(`http://localhost:3000/api/songs?query=${query}`);
+            setSongs(response.data);
+        }
+        catch(error) {
+            console.error("Error searching for songs", error);
+        }
     };
 
     const handleLogout = () => {
@@ -46,15 +45,16 @@ function MainPage() {
         <div>
             <Sidebar user={user} />
             <div className="main-content">
-             <h1>Welcome to the main page</h1>
              <SearchBar onSearch={handleSearch}/>
              <ul>
-
-             </ul>
-            </div>
+                {songs.map((song) => (
+                    <li key={song.id}>{song.name}</li>
+                ))}
+                </ul>   
             <h1>Main Page</h1>
             <p>In future here you people can listen to blockbuster songs - wait for a while</p>
-            <button onClick={handleLogout}></button>
+            <button onClick={handleLogout}>Logout</button>
+        </div>
         </div>
     );
 };
