@@ -1,32 +1,70 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import pool from '../db.js';
+import { authenticateToken } from '../middleware/authmiddleware.js';
 
 const router = express.Router();
-
-const users = []; // Replace with DB in production
 
 // Register
 router.post('/register', async (req, res) => {
   const { username, email, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
-  users.push({ username, email, password: hashedPassword });
-  res.status(201).send('User registered');
+
+try {
+    const result = await pool.query(
+        'insert into users(username, email, password) values ($1, $2, $3) returning *', 
+        [username, email, hashedPassword]
+    );
+    res.status(201).json(result.rows[0]);
+}
+catch(error) {
+    console.error("Error inserting user:", error);
+    res.status(500).json({error : "Database error"});
+}
 });
 
 // Login
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
-  const user = users.find(user => user.email === email);
-  if (!user) {
-    return res.status(400).send('User not found');
+
+  try {
+    const result = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    if (result.rows.length === 0) {
+      return res.status(400).json({ error: "Invalid email or password" });
+    }
+
+    const user = result.rows[0];
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(400).json({ error: 'Invalid email or password' });
+    }
+
+    const token = jwt.sign({ id: user.id }, 'vishnu79', { expiresIn: '1h' });
+    res.json({token, user});
+  } catch (error) {
+    console.error("Error logging in user:", error);
+    res.status(500).json({ error: 'Database error' });
   }
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {
-    return res.status(400).send('Invalid credentials');
+});
+
+router.get("/user", authenticateToken, async (req, res) => {
+
+  console.log('Received request for /user with headers:', req.headers);
+  console.log('User ID from token:', req.user.id);
+
+try {
+  const result = await pool.query("select id, username, email from users where id = $1", [req.user.id]);
+  if(result.rows.length === 0) {
+    return res.status(404).json({error : 'User not found'});
   }
-  const token = jwt.sign({ email: user.email }, 'secret', { expiresIn: '1h' });
-  res.json({ token });
+  res.json(result.rows[0]);
+}
+ catch(error) {
+  console.error("Error fetching user data:", error);
+  res.status(500).json({error : 'Database error'});
+ }
 });
 
 export default router;
