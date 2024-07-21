@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import { FaBars } from 'react-icons/fa';
 import axios from "axios";
 
 function MainPage() {
@@ -34,14 +35,32 @@ function MainPage() {
     };
 
     return(
-        <div style={{display : 'flex'}}>
-            <Sidebar user={user} handleLogout={handleLogout}/>
-            <div className="main-content" style={{flex : 1}}>
-                <h1>Main page</h1>
-                <p>Soon - everything is going to change</p>
+       <div className="flex min-h-screen bg-gray-100">
+        <Sidebar user={user} handleLogout={handleLogout} />
+        <div className="flex-1 p-6">
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-3xl font-bold">Welcome, {user.username}</h1>
+                <button onClick={handleLogout} className="bg-red-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-700">
+                      Logout
+                </button>
             </div>
-           
+            <div className="mb-6">
+                <input type="text"
+                       placeholder="search for super sounds.."
+                       className="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+                />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {songs.map((song, index) => (
+                        <div key={index} className="bg-white p-4 rounded-md shadow-md">
+                            <h2 className="text-xl font-bold">{song.title}</h2>
+                            <p className="text-gray-700">{song.artist}</p>
+                        </div>
+                    ))}
+            </div>
         </div>
+       </div>
     );
 };
 

@@ -1,19 +1,18 @@
 import React from "react";
+// import { FaTimes } from 'reacr-icons/fa';
 import { Link } from "react-router-dom";
 
 function Sidebar({ user, handleLogout }) {
    return (
-    <div className="sidebar">
-        <div>
-        <h3>Welcome, {user.username}</h3>
+    <div className="w-64 bg-white p-6 shadow-md h-screen">
+        <div className="mb-6">
+            <h2 className="text-xl font-bold">{user.username}</h2>
+            <Link to="/playlists" className="block text-blue-600 mt-4">Playlists</Link>    
         </div>
-        <nav>
-        <ul>
-            <li><Link to = "/main">Home</Link></li>
-            <li><Link to = "/playlists">Playlists</Link></li>
-            <li><button onClick={handleLogout}>Logout</button></li>
-         </ul>
-        </nav>
+
+        <button onClick={handleLogout} className="bg-red-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-700">
+          Logout
+        </button>
     </div>
    );
 };
