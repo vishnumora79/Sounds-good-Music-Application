@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
-// import { FaBars } from 'react-icons/fa';
+import { FaBars } from 'react-icons/fa';
 import axios from "axios";
+import Song from "../components/Song";
+import song_audio from "../assets/data";
+
+
 
 function MainPage() {
     // contains data about the current user
     const [user, setUser] = useState({});
-    // const [songs, setSongs] = useState([]);
+    const [songs, setSongs] = useState([]);
     const navigate = useNavigate();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -33,6 +37,8 @@ function MainPage() {
             }
         };
         fetchUserData();
+
+        setSongs(song_audio());
     }, []);
 
     return(
@@ -50,17 +56,13 @@ function MainPage() {
                 />
             </div>
 
-
-            {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {songs.map((song, index) => (
-                        <div key={index} className="bg-white p-4 rounded-md shadow-md">
-                            <h2 className="text-xl font-bold">{song.title}</h2>
-                            <p className="text-gray-700">{song.artist}</p>
-                        </div>
-                    ))}
-            </div> */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4"> 
+            {songs.map((song) => (
+                <Song key={song.id} song = {song}/>
+            ))}
         </div>
-       </div>
+    </div>
+</div>
     );
 };
 
