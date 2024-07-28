@@ -67,4 +67,16 @@ try {
  }
 });
 
+// router.post("/logout", authenticateToken, async (req, res) => {
+//   try {
+//     req.user.token = null;
+
+//     res.status(200);
+//   }
+//   catch(error) {
+//     console.error(error);
+//     res.status(500);
+//   }
+// })
+
 export default router;

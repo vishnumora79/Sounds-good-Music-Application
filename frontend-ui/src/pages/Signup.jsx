@@ -13,10 +13,10 @@ function Signup() {
     const handleSubmit = async (e) => {
       e.preventDefault();
 
-      if(password !== confirmPassword) {
-        setError("Passwords do not match");
-        return;
-      }
+      // if(password !== confirmPassword) {
+      //   setError("Passwords do not match");
+      //   return;
+      // }
 
 
       try {
@@ -68,7 +68,7 @@ function Signup() {
           </button>
         </form>
         <div>
-        <p>Already have an account? <Link to="/login">Login</Link></p>
+        <p>Already have an account? <Link to="/login" style={{color : "green"}}>Login</Link></p>
         </div>
         </div>
         </div>

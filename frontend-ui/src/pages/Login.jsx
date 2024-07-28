@@ -53,6 +53,8 @@ function Login() {
                 <button type="submit" className="w-full py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700">
                     Login
                 </button>
+
+                <p>Don't have an account? <Link to="/signup" style={{color : 'green'}}>Signup</Link></p>
             </form>
         </div>
        </div>

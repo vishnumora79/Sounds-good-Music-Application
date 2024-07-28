@@ -1,20 +1,42 @@
-import React from "react";
-// import { FaTimes } from 'reacr-icons/fa';
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { FaBars, FaTimes } from "react-icons/fa";
+import Logout from "../pages/Logout";
 
-function Sidebar({ user, handleLogout }) {
-   return (
-    <div className="w-64 bg-white p-6 shadow-md h-screen">
-        <div className="mb-6">
-            <h2 className="text-xl font-bold">{user.username}</h2>
-            <Link to="/playlists" className="block text-blue-600 mt-4">Playlists</Link>    
+function Sidebar({ user, isOpen, toggle }) {
+
+  
+  return (
+    <div className="relative">  
+        <div className="fixed top-4 right-4 z-50">
+               
+      <div>
+        <Logout />
+      </div>   
+
+      <br />
+
+             <button onClick={toggle}>
+                    {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+             </button>        
         </div>
 
-        <button onClick={handleLogout} className="bg-red-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-red-700">
-          Logout
-        </button>
+
+      <div
+              className={`fixed top-0 right-0 h-full w-64 bg-blue-800 text-white transition-transform transform ${
+                  isOpen ? 'translate-y-0' : 'translate-y-full'
+              }`}
+      >
+        <div className="p-4">
+             <h2 className="text-2xl font-semibold mb-4">Profile</h2>
+             <p className="mb-4">Welcome, {user.username}</p>
+             <br />  
+        </div>    
+      </div>
     </div>
-   );
+  );
 };
 
 export default Sidebar;
+
+
+
